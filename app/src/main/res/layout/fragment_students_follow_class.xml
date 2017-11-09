@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Spinner
+            android:id="@+id/spinnerClass"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="#ce9089"
+            android:popupBackground="@color/colorGreenHardLight"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:id="@+id/imgArrow1"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@+id/spinnerClass"
+            android:background="#ce9089"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+
+        <Spinner
+            android:id="@+id/spinnerYear"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/imgArrow1"
+            android:background="#ce9089"
+            android:popupBackground="@color/colorGreenHardLight"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:id="@+id/imgArrow2"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@+id/spinnerYear"
+            android:background="#ce9089"
+            android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewStudents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp" />
+</LinearLayout>

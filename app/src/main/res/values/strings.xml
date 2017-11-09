@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">DACNPM</string>
+    <string name="title">TRƯỜNG TIỂU HỌC SEN XANH</string>
+    <string name="login">LOGIN</string>
+    <string name="hint_user">User...</string>
+    <string name="hint_password">Password...</string>
+    <string name="button_login">Login</string>
+    <string name="dialog_title">Chọn thao tác</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="name">Họ và tên:</string>
+    <string name="idGv">Mã số GV:</string>
+    <string name="idHs">Mã số HS:</string>
+    <string name="address">Địa chỉ:</string>
+    <string name="phone">Liên hệ:</string>
+    <string name="sex">Giới tính:</string>
+    <string name="birthday">Ngày sinh:</string>
+    <string name="religion">Tôn giáo:</string>
+    <string name="nation">Dân tộc:</string>
+    <string name="current_class">Lớp:</string>
+    <string name="father_name">Họ tên cha:</string>
+    <string name="mother_name">Họ tên mẹ:</string>
+    <string name="father_job">Nghề nghiệp cha:</string>
+    <string name="mother_job">Nghề nghiệp mẹ:</string>
+    <string name="monhoc">Môn học</string>
+    <string name="kihoc">Kì học</string>
+    <string name="namhoc">Năm học</string>
+
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tvNameStudent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:textColor="#1e4d35"
+            android:textSize="20dp" />
+
+        <ImageButton
+            android:id="@+id/imgBtnDetailStudent"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_assignment_ind_pink_900_24dp" />
+
+        <ImageButton
+            android:id="@+id/imgBtnScore"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_whatshot_pink_900_24dp" />
+
+        <ImageButton
+            android:id="@+id/imgBtnConduct"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_school_pink_900_24dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorGreen" />
+</LinearLayout>

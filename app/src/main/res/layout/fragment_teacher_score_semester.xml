@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinnerYearScore"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="#727fd2"
+                android:popupBackground="@color/colorGreenHardLight"
+                android:spinnerMode="dropdown" />
+
+
+            <ImageView
+                android:id="@+id/imgArrow1"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_toRightOf="@+id/spinnerYearScore"
+                android:background="#727fd2"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+
+            <Spinner
+                android:id="@+id/spinnerSemesterScore"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/imgArrow1"
+                android:background="#727fd2"
+                android:popupBackground="@color/colorGreenHardLight"
+                android:spinnerMode="dropdown" />
+
+            <ImageView
+                android:id="@+id/imgArrow2"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_toRightOf="@+id/spinnerSemesterScore"
+                android:background="#727fd2"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+
+
+            <Spinner
+                android:id="@+id/spinnerSubjectScore"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/imgArrow2"
+                android:background="#727fd2"
+                android:popupBackground="@color/colorGreenHardLight"
+                android:spinnerMode="dropdown" />
+
+            <ImageView
+                android:id="@+id/imgArrow3"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_toRightOf="@+id/spinnerSubjectScore"
+                android:background="#727fd2"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:background="@drawable/bg_textview"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Hệ số 1:"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtMouth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="6"
+                android:enabled="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:background="@drawable/bg_textview"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Hệ số 2:"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtMidSemester"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="6"
+                android:enabled="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:background="@drawable/bg_textview"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Hệ số 3:"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtFinalSemester"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="6"
+                android:enabled="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="left"
+                android:padding="10dp"
+                android:text="TBHK môn:"
+                android:textColor="@color/colorGreyLight"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvAverageSemester"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="6"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp">
+
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_button_edit_save"
+                android:text="edit" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/bg_button_edit_save"
+                android:enabled="false"
+                android:text="save" />
+        </RelativeLayout>
+</LinearLayout>

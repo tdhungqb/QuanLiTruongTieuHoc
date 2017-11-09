@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:layout_marginTop="40dp"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/bg_textview"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="Tiết 1:"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvLesson1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="7"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/bg_textview"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="Tiết 2:"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvLesson2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="7"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/bg_textview"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="Tiết 3:"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvLesson3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="7"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/bg_textview"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Tiết 4:"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvLesson4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="7"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/bg_textview"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="Tiết 5:"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvLesson5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="7"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>
