@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,8 @@ import android.widget.Spinner;
 import com.example.hangtrantd.dacnpm.R;
 import com.example.hangtrantd.dacnpm.timetable.TimeTableAdapter;
 import com.example.hangtrantd.dacnpm.util.Api;
+import com.example.hangtrantd.dacnpm.util.Semester;
+import com.example.hangtrantd.dacnpm.util.Year;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -72,33 +73,38 @@ public class TeacherTimeTableFragment extends Fragment implements Spinner.OnItem
     private void initSpinners() {
         mSpinnerYear = mView.findViewById(R.id.spinnerYearTimeTable);
         mSpinnerYear.setOnItemSelectedListener(this);
-        Api.getApiService().getYears().enqueue(new Callback<List<String>>() {
+        Api.getApiService().getYears().enqueue(new Callback<List<Year>>() {
             @Override
-            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
-                List<String> years = response.body();
+            public void onResponse(@NonNull Call<List<Year>> call, @NonNull Response<List<Year>> response) {
+                List<Year> years = response.body();
+                List<String> yearNames = new ArrayList<>();
                 if (years != null) {
-                    ArrayAdapter<String> adapterYear = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, years);
+                    for (int i = 0; i < years.size(); i++) {
+                        yearNames.add("Năm học "+years.get(i).getTen());
+                    }
+                    ArrayAdapter<String> adapterYear = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, yearNames);
                     mSpinnerYear.setAdapter(adapterYear);
-                    int currentYear = mCalendar.get(Calendar.YEAR);
-                    mSpinnerYear.setSelection(adapterYear.getPosition("Năm học " + currentYear + "-" + (currentYear + 1)));
+                    mSpinnerYear.setSelection(adapterYear.getPosition( "Năm học "+mCalendar.get(Calendar.YEAR) + "-" + (mCalendar.get(Calendar.YEAR) + 1)));
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
-
+            public void onFailure(@NonNull Call<List<Year>> call, @NonNull Throwable t) {
             }
         });
 
         mSpinnerSemester = mView.findViewById(R.id.spinnerSemesterTimeTable);
         mSpinnerSemester.setOnItemSelectedListener(this);
-        Api.getApiService().getSemesters().enqueue(new Callback<List<String>>() {
+        Api.getApiService().getSemesters().enqueue(new Callback<List<Semester>>() {
             @Override
-            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
-                List<String> semesters = response.body();
-                String currentSemester;
+            public void onResponse(@NonNull Call<List<Semester>> call, @NonNull Response<List<Semester>> response) {
+                List<Semester> semesters = response.body();
+                List<String> semesterNames = new ArrayList<>();
                 if (semesters != null) {
-                    ArrayAdapter<String> adapterSemester = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, semesters);
+                    for (int i = 0; i < semesters.size(); i++) {
+                        semesterNames.add(semesters.get(i).getTen());
+                    }
+                    ArrayAdapter<String> adapterSemester = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, semesterNames);
                     mSpinnerSemester.setAdapter(adapterSemester);
                     switch (mCalendar.get(Calendar.MONTH)) {
                         case 1:
@@ -107,19 +113,18 @@ public class TeacherTimeTableFragment extends Fragment implements Spinner.OnItem
                         case 4:
                         case 5:
                         case 6:
-                            currentSemester = "Học kì 1";
+                            mSemester = "Học Kì 1";
                             break;
                         default:
-                            currentSemester = "Học kì 2";
+                            mSemester = "Học Kì 2";
                             break;
                     }
-                    mSpinnerSemester.setSelection(adapterSemester.getPosition(currentSemester));
+                    mSpinnerSemester.setSelection(adapterSemester.getPosition(mSemester));
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
-
+            public void onFailure(@NonNull Call<List<Semester>> call, @NonNull Throwable t) {
             }
         });
     }
@@ -147,35 +152,28 @@ public class TeacherTimeTableFragment extends Fragment implements Spinner.OnItem
                 mTimeTableTeachers = response.body();
                 if (mTimeTableTeachers != null) {
                     for (int j = 0; j < mTimeTableTeachers.size(); j++) {
-                        Log.d("sssssssssss20",mYear+","+mSemester);
-                        Log.d("sssssssssss20",mTimeTableTeachers.get(j).getYear()+","+mTimeTableTeachers.get(j).getSemester());
-                        if (mTimeTableTeachers.get(j).getYear().equals(mYear)) {
+                        if (("Năm học "+mTimeTableTeachers.get(j).getYear()).equals(mYear)) {
                             if (mTimeTableTeachers.get(j).getSemester().equals(mSemester)) {
                                 switch (mTimeTableTeachers.get(j).getDate()) {
                                     case "2":
-                                        Log.d("sssssssssss2",mTeacherTimeTables.get(0).getClazz()+","+mIdUser);
                                         int x = Integer.parseInt(mTimeTableTeachers.get(j).getLesson()) * 5 + 2;
                                         mTeacherTimeTables.set(x, mTimeTableTeachers.get(j));
                                         break;
                                     case "3":
-                                        Log.d("sssssssssss3",mTeacherTimeTables.get(0).getClazz()+","+mIdUser);
                                         int y = Integer.parseInt(mTimeTableTeachers.get(j).getLesson()) * 5 + 3;
                                         mTeacherTimeTables.set(y, mTimeTableTeachers.get(j));
                                         break;
                                     case "4":
-                                        Log.d("sssssssssss4",mTeacherTimeTables.get(0).getClazz()+","+mIdUser);
                                         int z = Integer.parseInt(mTimeTableTeachers.get(j).getLesson()) * 5 + 4;
                                         mTeacherTimeTables.set(z, mTimeTableTeachers.get(j));
                                         break;
                                     case "5":
-                                        Log.d("ssssssssss5",mTeacherTimeTables.get(0).getClazz()+","+mIdUser);
                                         int m = Integer.parseInt(mTimeTableTeachers.get(j).getLesson()) * 5 + 5;
                                         mTeacherTimeTables.set(m, mTimeTableTeachers.get(j));
                                         break;
                                     case "6":
                                         int n = Integer.parseInt(mTimeTableTeachers.get(j).getLesson()) * 5 + 6;
                                         mTeacherTimeTables.set(n, mTimeTableTeachers.get(j));
-                                        Log.d("sssssssssss6",mTeacherTimeTables.get(n).getSubject()+","+mIdUser);
                                         break;
                                 }
                             }
@@ -183,16 +181,13 @@ public class TeacherTimeTableFragment extends Fragment implements Spinner.OnItem
                     }
                     initTimeTable();
                     mClazzSubjects.clear();
-                    Log.d("sssssssssssh1",mTeacherTimeTables.size()+"");
                     for (int i = 0; i < mTeacherTimeTables.size(); i++) {
                         mClazzSubjects.add(new ClassSubject(mTeacherTimeTables.get(i).getClazz(),mTeacherTimeTables.get(i).getSubject()));
                     }
-                    Log.d("sssssssssssh2",mClazzSubjects.size()+"");
                     mName.clear();
                     for (int i = 0; i < mClazzSubjects.size(); i++) {
                         mName.add(mClazzSubjects.get(i).getSubject()+"\n"+mClazzSubjects.get(i).getClazz());
                     }
-                    Log.d("sssssssssssh3",mName.size()+"");
                     mAdapter.notifyDataSetChanged();
                 }
             }

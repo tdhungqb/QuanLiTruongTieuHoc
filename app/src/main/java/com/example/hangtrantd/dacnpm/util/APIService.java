@@ -6,19 +6,18 @@ import com.example.hangtrantd.dacnpm.login.User;
 import com.example.hangtrantd.dacnpm.score.Capacity;
 import com.example.hangtrantd.dacnpm.score.Score;
 import com.example.hangtrantd.dacnpm.student.Student;
+import com.example.hangtrantd.dacnpm.student.TimeTableStudent;
 import com.example.hangtrantd.dacnpm.teacher.NameStudent;
 import com.example.hangtrantd.dacnpm.teacher.Subject;
 import com.example.hangtrantd.dacnpm.teacher.Teacher;
-import com.example.hangtrantd.dacnpm.student.TimeTableStudent;
 import com.example.hangtrantd.dacnpm.teacher.TimeTableTeacher;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
  * Copyright © 2017 Asian Tech Co., Ltd.
@@ -27,98 +26,100 @@ import retrofit2.http.POST;
 
 public interface APIService {
 
-    @POST("/user.php")
-    @FormUrlEncoded
-    Call<User> getInforUser(@Field("maso") String id);
+    @GET("nguoidung/{maso}")
+    Call<List<User>> getInforUser(@Path("maso") String id);
 
-    @POST("/getTeacher.php")
-    @FormUrlEncoded
-    Call<Teacher> getInforTeacher(@Field("id") String id);
+    @GET("giaovien/getTeacher/{id}")
+    Call<List<Teacher>> getInforTeacher(@Path("id") String id);
 
-    @POST("/updateTeacher.php")
-    @FormUrlEncoded
-    Call<String> updateTeacher(@Field("id") String id, @Field("hoten") String name, @Field("diachi") String address, @Field("sodienthoai") String phone, @Field("gioitinh") String gender, @Field("ngaysinh") String birthDay, @Field("tongiao") String religion, @Field("dantoc") String nation);
+    @GET("giaovien/editTeacher/{id}/{loaimonhoc}/{diachi}/{sodienthoai}'")
+    Call<String> updateTeacher(@Path("id") String id, @Path("loaimonhoc") String religion, @Path("diachi") String address, @Path("sodienthoai") String phone);
 
-    @GET("/getInfors.php")
+    @GET("hoatdong")
     Call<List<Infor>> getInfors();
 
-    @POST("/getStudent.php")
-    @FormUrlEncoded
-    Call<Student> getInforStudent(@Field("id") String id);
+    @GET("nghenghiep")
+    Call<List<Job>> getJobs();
 
-    @POST("/updateStudent.php")
-    @FormUrlEncoded
-    Call<String> updateStudent(@Field("id") String id, @Field("hoten") String name, @Field("gioitinh") String gender,
-                               @Field("ngaysinh") String birthDay, @Field("noisinh") String address, @Field("lop") String clazz,
-                               @Field("dantoc") String nation, @Field("tongiao") String religion,
-                               @Field("hotencha") String fatherName, @Field("nghenghiepcha") String fatherJob,
-                               @Field("hotenme") String motherName, @Field("nghenghiepme") String motherJob, @Field("sodienthoai") String phone);
+    @GET("hocsinh/getStudent/{id}")
+    Call<List<Student>> getInforStudent(@Path("id") String id);
 
-    @POST("/getTimeTableOfTeacher.php")
-    @FormUrlEncoded
-    Call<List<TimeTableTeacher>> getTimeTableOfTeacher(@Field("id") String id);
+    @GET("hocsinh/editStudent/{id}/{diachi}/{dantoc}/{tongiao}/{nghenghiepcha}/{nghenghiepme}/{sodienthoai}")
+    Call<String> updateStudent(@Path("id") String id,
+                               @Path("diachi") String address,
+                               @Path("dantoc") String nation, @Path("tongiao") String religion,
+                               @Path("nghenghiepcha") String fatherJob,
+                               @Path("nghenghiepme") String motherJob, @Path("sodienthoai") String phone);
 
-    @POST("/showTimeTableStudent.php")
-    @FormUrlEncoded
-    Call<List<TimeTableStudent>> getTimeTableStudent(@Field("id") String id);
+    @GET("giaovien/getScheduleOfTeacher/{id}")
+    Call<List<TimeTableTeacher>> getTimeTableOfTeacher(@Path("id") String id);
+
+    @GET("hocsinh/getScheduleOfStudent/{id}") //29
+    Call<List<TimeTableStudent>> getTimeTableStudent(@Path("id") String id);
 
 
-    @POST("/getClassesOfTeacher.php")
-    @FormUrlEncoded
-    Call<List<String>> getClasses(@Field("id") String id);
+    @GET("giaovien/getClassOfTeacher/{id}")
+    Call<List<ClassName>> getClasses(@Path("id") String id);
 
-    @GET("/getClasses.php")
-    Call<List<String>> getClasses();
+//    @GET("lop")
+//    Call<List<Clazz>> getClasses();
 
-    @POST("/getStudents.php")
-    @FormUrlEncoded
-    Call<List<NameStudent>> getStudents(@Field("id") String id);
+    @GET("giaovien/getStudents/{id}")
+    Call<List<NameStudent>> getStudents(@Path("id") String id);
 
-    @GET("/getSubjects.php")
+    @GET("monhoc")
     Call<List<Subject>> getSubjects();
 
-    @POST("/scoreStudentOfTeacher.php")
-    @FormUrlEncoded
-    Call<List<Score>> getScores(@Field("maHS") String idStudent);
+    @GET("hocsinh/getScoreStudent/{maHS}")
+    Call<List<Score>> getScores(@Path("maHS") String idStudent);
 
-    @POST("/updateScore.php")
-    @FormUrlEncoded
-    Call<String> updateScore(@Field("idStudent") String idStudent, @Field("nameSubject") String nameSubject, @Field("class") String clazz, @Field("semester") String semester, @Field("year") String year,
-                             @Field("mouth") String mouth,
-                             @Field("midSemester") String midSemester, @Field("finalSemester") String finalSemester);
+    @GET("giaovien/updateScore/{idHS}/{tenMonHoc}/{lop}/{hocky}/{namhoc}/{heso1}/{heso2}/{heso3}")
+    Call<String> updateScore(@Path("idHS") String idStudent, @Path("tenMonHoc") String nameSubject,
+                             @Path("lop") String clazz, @Path("hocky") String semester,
+                             @Path("namhoc") String year, @Path("heso1") String mouth,
+                             @Path("heso2") String midSemester, @Path("heso3") String finalSemester);
 
-    @POST("/updateAvatar.php")
-    @FormUrlEncoded
-    Call<String> updateAvatar(@Field("id") String id, @Field("base64") String data);
+//    @POST("/updateAvatar.php")
+//    @FormUrlEncoded
+//    Call<String> updateAvatar(@Field("id") String id, @Field("base64") String data);
 
-    @POST("/getAvatar.php")
-    @FormUrlEncoded
-    Call<String> getAvatar(@Field("id") String id);
+//    @GET("/getAvatar.php/{id}")
+//    Call<String> getAvatar(@Path("id") String id);
 
-    @GET("/getNations.php")
+    @GET("dantoc")
     Call<List<Country>> getNations();
 
-    @GET("/getReligions.php")
+    @GET("tongiao")
     Call<List<Country>> getReligions();
 
-    @GET("/getYears.php")
-    Call<List<String>> getYears();
+    @GET("namhoc")
+    Call<List<Year>> getYears();
 
-    @GET("/getSemesters.php")
-    Call<List<String>> getSemesters();
+    @GET("hocky")
+    Call<List<Semester>> getSemesters();
 
-    @GET("/capacityOfStudent.php")
+    @GET("hocluc")
     Call<List<Capacity>> getCapacities();
 
-    @GET("/getConducts.php")
-    Call<List<String>> getConducts();
+    @GET("hanhkiem")
+    Call<List<NameConduct>> getConducts();
 
-    @POST("/getConductStudent.php")
-    @FormUrlEncoded
-    Call<List<Conduct>> getConduct(@Field("id") String id);
+    @GET("loaimonhoc")
+    Call<List<SubjectType>> getSubjectTypes();
 
-    @POST("/updateConduct.php")
-    @FormUrlEncoded
-    Call<String> updateConduct(@Field("id") String id, @Field("hanhkiem") String conduct,@Field("namhoc") String year,@Field("hocky") String hocky,@Field("ghichu") String note);
+    @GET("hocsinh/getConductOfStudent/{id}")
+    Call<List<Conduct>> getConduct(@Path("id") String id);
+
+    @GET("giaovien/updateConduct/{id}/{hanhkiem}/{namhoc}/{hocky}")
+    Call<String> updateConduct(@Path("id") String id, @Path("hanhkiem") String conduct, @Path("namhoc") String year, @Path("hocky") String hocky);
+
+    @GET("/getProvences.php")
+    Call<List<String>> getProvences();
+
+    @GET("/getDistricts.php/{tinh}")
+    Call<List<String>> getDistricts(@Path("tinh") String id);
+
+    @GET("/getDistrictName.php/{id}")
+    Call<MyAdrress> getDistrictName(@Field("id") String id);
 }
 

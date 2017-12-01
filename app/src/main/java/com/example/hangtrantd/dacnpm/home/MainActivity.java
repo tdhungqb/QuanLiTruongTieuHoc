@@ -1,35 +1,28 @@
 package com.example.hangtrantd.dacnpm.home;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Base64;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -37,22 +30,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hangtrantd.dacnpm.R;
-import com.example.hangtrantd.dacnpm.conduct.ConductFragment;
 import com.example.hangtrantd.dacnpm.login.LoginActivity;
 import com.example.hangtrantd.dacnpm.login.User;
+import com.example.hangtrantd.dacnpm.student.ConductStudentFragment;
 import com.example.hangtrantd.dacnpm.student.DetailStudentFragment;
 import com.example.hangtrantd.dacnpm.student.ScoreStudentFragment;
 import com.example.hangtrantd.dacnpm.student.Student;
 import com.example.hangtrantd.dacnpm.student.StudentTimeTableFragment;
 import com.example.hangtrantd.dacnpm.teacher.DetailTeacherFragment;
+import com.example.hangtrantd.dacnpm.teacher.NameStudent;
 import com.example.hangtrantd.dacnpm.teacher.ScoreTeacherFragment;
 import com.example.hangtrantd.dacnpm.teacher.ShowStudentsFragment;
 import com.example.hangtrantd.dacnpm.teacher.Teacher;
 import com.example.hangtrantd.dacnpm.teacher.TeacherTimeTableFragment;
 import com.example.hangtrantd.dacnpm.util.Api;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
-import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,18 +53,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.graphics.Bitmap.createBitmap;
-
 public class MainActivity extends AppCompatActivity implements ShowStudentsFragment.PositionListener {
-
-    private static final int REQUEST_CODE_IMAGE_GALLERY = 1;
-    private static final int REQUEST_CODE_IMAGE_CAMERA = 2;
-    private static final String KEY_DATA = "data";
 
     private RelativeLayout mrlContainer;
     private ImageView mImgMenu;
+    private ImageView mImgAvatar;
     private DrawerLayout mDrawerLayout;
-    private MaterialSearchView mSearchView;
     private int mPositionSelected = -1;
     private MenuAdapter mAdapter;
     private static FragmentManager mFragmentManager;
@@ -81,8 +68,10 @@ public class MainActivity extends AppCompatActivity implements ShowStudentsFragm
     private Student mStudent;
     private Boolean exit = false;
     private ProgressBar mProgressBar;
-    private ImageView mImgAvatar;
-    private  Boolean isShowSearch = false;
+    private Boolean isShowSearch = false;
+    public static AutoCompleteTextView mAutoCompleteTextView;
+    private SearchAdapter mAdapterSearch;
+    private ArrayList<NameStudent> mStudents = new ArrayList<>();
 
 
     @Override
@@ -93,9 +82,7 @@ public class MainActivity extends AppCompatActivity implements ShowStudentsFragm
         checkPermission();
         initViews();
         initDrawer();
-        querySearchView();
         showInfor();
-        getAvatar();
     }
 
     public void showBar() {
@@ -106,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements ShowStudentsFragm
                 mProgressBar.setVisibility(View.GONE);
             }
 
-        }, 2000);
+        }, 5000);
     }
 
     private void checkPermission() {
@@ -155,56 +142,15 @@ public class MainActivity extends AppCompatActivity implements ShowStudentsFragm
 
         mrlContainer = (RelativeLayout) findViewById(R.id.rlContainer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        mSearchView = (MaterialSearchView) findViewById(R.id.search_view);
+        mAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autocompleteView);
 
         mTvFullName = (TextView) findViewById(R.id.tvFullName);
         mImgMenu = (ImageView) findViewById(R.id.imgMenu);
         mImgAvatar = (ImageView) findViewById(R.id.imgAvatar);
 
-        mImgAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showChooseImageDialog();
-            }
-        });
-
         mFragmentManager = getSupportFragmentManager();
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-    }
 
-
-    private void showChooseImageDialog() {
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(MainActivity.this);
-        builderSingle.setTitle(R.string.dialog_title);
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.select_dialog_item);
-        arrayAdapter.add(getString(R.string.camera));
-        arrayAdapter.add(getString(R.string.gallery));
-
-        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String strName = arrayAdapter.getItem(which);
-                if (TextUtils.equals(strName, getString(R.string.camera))) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    cropImage(intent);
-                    startActivityForResult(intent, REQUEST_CODE_IMAGE_CAMERA);
-                } else {
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    cropImage(intent);
-                    startActivityForResult(intent, REQUEST_CODE_IMAGE_GALLERY);
-                }
-            }
-        });
-        builderSingle.show();
-    }
-
-    private void cropImage(Intent intent) {
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 200);
-        intent.putExtra("aspectY", 200);
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 200);
-        intent.putExtra("return-data", true);
     }
 
     private void initDrawer() {
@@ -230,31 +176,6 @@ public class MainActivity extends AppCompatActivity implements ShowStudentsFragm
         drawerToggle.syncState();
     }
 
-    private void querySearchView() {
-        mSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
-        mSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-            }
-
-            @Override
-            public void onSearchViewClosed() {
-            }
-        });
-    }
-
-
     private void showInfor() {
         InforFragment inforFragment = new InforFragment();
         FragmentTransaction frInfor = mFragmentManager.beginTransaction();
@@ -262,37 +183,23 @@ public class MainActivity extends AppCompatActivity implements ShowStudentsFragm
         frInfor.commit();
     }
 
-    private void getAvatar() {
-        if (mIdUser != null) {
-            Api.getApiService().getAvatar(mIdUser).enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    String base64 = response.body();
-                    byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    RoundedBitmapDrawable drawable = createRoundBorder(decodedByte);
-                    mImgAvatar.setImageDrawable(drawable);
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                }
-            });
-        }
-    }
-
     private void getAPITeacher() {
-        Api.getApiService().getInforTeacher(mIdUser).enqueue(new Callback<Teacher>() {
+        Api.getApiService().getInforTeacher(mIdUser).enqueue(new Callback<List<Teacher>>() {
             @Override
-            public void onResponse(@NonNull Call<Teacher> call, @NonNull Response<Teacher> response) {
-                mTeacher = response.body();
-                if (mTeacher != null) {
+            public void onResponse(@NonNull Call<List<Teacher>> call, @NonNull Response<List<Teacher>> response) {
+                if (response.body() != null && response.body().size() != 0) {
+                    mTeacher = response.body().get(0);
                     mTvFullName.setText(mTeacher.getName());
+                    if (mTeacher.getGender().equals("0")) {
+                        mImgAvatar.setImageResource(R.drawable.ic_male);
+                    } else {
+                        mImgAvatar.setImageResource(R.drawable.ic_female);
+                    }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Teacher> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Teacher>> call, @NonNull Throwable t) {
             }
         });
     }
@@ -302,17 +209,22 @@ public class MainActivity extends AppCompatActivity implements ShowStudentsFragm
     }
 
     public void getAPIStudent() {
-        Api.getApiService().getInforStudent(mIdUser).enqueue(new Callback<Student>() {
+        Api.getApiService().getInforStudent(mIdUser).enqueue(new Callback<List<Student>>() {
             @Override
-            public void onResponse(@NonNull Call<Student> call, @NonNull Response<Student> response) {
-                mStudent = response.body();
-                if (mStudent != null) {
+            public void onResponse(@NonNull Call<List<Student>> call, @NonNull Response<List<Student>> response) {
+                if (response.body() != null && response.body().size() != 0) {
+                    mStudent = response.body().get(0);
                     mTvFullName.setText(mStudent.getName());
+                    if (mStudent.getGender().equals("0")) {
+                        mImgAvatar.setImageResource(R.drawable.ic_male);
+                    } else {
+                        mImgAvatar.setImageResource(R.drawable.ic_female);
+                    }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Student> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Student>> call, @NonNull Throwable t) {
             }
         });
     }
@@ -381,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements ShowStudentsFragm
                 break;
             case 4:
                 mIdUser = "";
+                ShowStudentsFragment.mStudent = null;
                 startActivity(new Intent(this, LoginActivity.class));
                 break;
         }
@@ -405,8 +318,8 @@ public class MainActivity extends AppCompatActivity implements ShowStudentsFragm
                 break;
             case 3:
                 showBar();
-                ConductFragment conductFragment = new ConductFragment();
-                initFragment(conductFragment);
+                ConductStudentFragment conductStudentFragment = new ConductStudentFragment();
+                initFragment(conductStudentFragment);
                 break;
             case 4:
                 showBar();
@@ -427,84 +340,91 @@ public class MainActivity extends AppCompatActivity implements ShowStudentsFragm
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
-        mSearchView.setMenuItem(item);
+        MenuItem search = menu.findItem(R.id.action_search);
         if (isShowSearch) {
-            item.setVisible(true);
+            search.setVisible(true);
         } else {
-            item.setVisible(false);
+            search.setVisible(false);
         }
         return true;
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == REQUEST_CODE_IMAGE_GALLERY || requestCode == REQUEST_CODE_IMAGE_CAMERA) {
-                getImage(data);
-                Api.getApiService().updateAvatar(mIdUser, getImageBase64(data)).enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                        Toast.makeText(MainActivity.this, "Update avatar success!", Toast.LENGTH_SHORT).show();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_search) {
+            getNameStudents();
+            mAutoCompleteTextView.setVisibility(View.VISIBLE);
+            mAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    mAdapterSearch = new SearchAdapter(MainActivity.this, R.layout.item_search, R.id.tvNameSearch, mStudents);
+                    mAutoCompleteTextView.setThreshold(1);
+                    mAutoCompleteTextView.setAdapter(mAdapterSearch);
+//                    if (editable.length() >= 1) {
+//                        mAdapterSearch.getFilter().filter(editable.toString());
+//
+//                    }
+                    mAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            mAutoCompleteTextView.setVisibility(View.GONE);
+                            mAutoCompleteTextView.setText("");
+                            Log.d("xxxxxxxxxxxx1", "onItemClick: " + mAdapterSearch.getIdStudent(i));
+                            int pos = ShowStudentsFragment.mAdapter.getPosition(mAdapterSearch.getIdStudent(i));
+                            if (pos != -1) {
+                                ShowStudentsFragment.mRecyclerView.scrollToPosition(pos);
+                                InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        return true;
+    }
+
+    private void getNameStudents() {
+        Api.getApiService().getStudents(mIdUser).enqueue(new Callback<List<NameStudent>>() {
+            @Override
+            public void onResponse(Call<List<NameStudent>> call, Response<List<NameStudent>> response) {
+                List<NameStudent> students = response.body();
+                if (students != null) {
+                    for (int i = 0; i < students.size(); i++) {
+                        if (ShowStudentsFragment.getYear() != null) {
+                            if (students.get(i).getYear().equals(ShowStudentsFragment.getYear())) {
+                                if (ShowStudentsFragment.getClazz() != null) {
+                                    if (students.get(i).getClazz().equals(ShowStudentsFragment.getClazz())) {
+                                        mStudents.add(students.get(i));
+                                    }
+                                }
+                            }
+                        }
                     }
-
-                    @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    }
-                });
+                }
             }
-        }
-    }
 
-    private void getImage(Intent data) {
-        Bundle extras = data.getExtras();
-        if (extras != null) {
-            Bitmap imageBitmap = (Bitmap) extras.get(KEY_DATA);
-            RoundedBitmapDrawable drawable = createRoundBorder(imageBitmap);
-            mImgAvatar.setImageDrawable(drawable);
-        }
-    }
+            @Override
+            public void onFailure(Call<List<NameStudent>> call, Throwable t) {
 
-    private String getImageBase64(Intent data) {
-        Bundle extras = data.getExtras();
-        if (extras != null) {
-            Bitmap imageBitmap = (Bitmap) extras.get(KEY_DATA);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            if (imageBitmap != null) {
-                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             }
-            byte[] byteArrayImage = baos.toByteArray();
-            return Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
-        }
-        return "";
-    }
-
-    private RoundedBitmapDrawable createRoundBorder(Bitmap bitmap) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int borderWidth = 1;
-        int radius = Math.min(width, height) / 2;
-        int squareWidth = Math.min(width, height);
-        int newSquare = Math.min(width, height) + borderWidth;
-
-        Bitmap roundedBitmap = createBitmap(newSquare, newSquare, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(roundedBitmap);
-        int x = borderWidth + squareWidth - width;
-        int y = borderWidth + squareWidth - height;
-        canvas.drawBitmap(bitmap, x, y, null);
-
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(borderWidth * 2);
-        paint.setColor(Color.GRAY);
-        canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, newSquare / 2, paint);
-        RoundedBitmapDrawable roundedDrawable = RoundedBitmapDrawableFactory.create(getResources(), roundedBitmap);
-        roundedDrawable.setCornerRadius(radius);
-        roundedDrawable.setAntiAlias(true);
-        return roundedDrawable;
+        });
     }
 
     @Override

@@ -57,7 +57,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
-                android:text="GV001"
+                android:text="111222333"
                 android:layout_weight="9"
                 android:hint="@string/hint_user"
                 android:padding="5dp"
@@ -87,7 +87,7 @@
                 android:layout_weight="9"
                 android:hint="@string/hint_password"
                 android:padding="5dp"
-                android:text="1234"
+                android:text="12345"
                 android:password="true"
                 android:textColor="@color/colorWhite"
                 android:textColorHint="@color/colorWhite" />

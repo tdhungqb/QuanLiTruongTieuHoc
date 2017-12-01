@@ -11,6 +11,8 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class User implements Parcelable {
+    @SerializedName("id")
+    private String id;
     @SerializedName("maso")
     private String maso;
     @SerializedName("password")
@@ -22,6 +24,12 @@ public class User implements Parcelable {
         maso = in.readString();
         password = in.readString();
         permission = in.readInt();
+    }
+
+    public User(String maso, String password, int permission) {
+        this.maso = maso;
+        this.password = password;
+        this.permission = permission;
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

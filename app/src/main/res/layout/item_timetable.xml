@@ -9,6 +9,6 @@
         android:layout_height="50dp"
         android:background="@drawable/bg_item_gridview"
         android:gravity="center"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold" />
 </RelativeLayout>

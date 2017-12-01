@@ -17,6 +17,8 @@ import com.example.hangtrantd.dacnpm.R;
 import com.example.hangtrantd.dacnpm.home.MainActivity;
 import com.example.hangtrantd.dacnpm.score.Score;
 import com.example.hangtrantd.dacnpm.util.Api;
+import com.example.hangtrantd.dacnpm.util.Semester;
+import com.example.hangtrantd.dacnpm.util.Year;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,12 +66,16 @@ public class ScoreStudentSemesterFragment extends Fragment implements Spinner.On
 
     private void initSpinners() {
         mSpinnerSemester.setOnItemSelectedListener(this);
-        Api.getApiService().getSemesters().enqueue(new Callback<List<String>>() {
+        Api.getApiService().getSemesters().enqueue(new Callback<List<Semester>>() {
             @Override
-            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
-                List<String> semesters = response.body();
+            public void onResponse(@NonNull Call<List<Semester>> call, @NonNull Response<List<Semester>> response) {
+                List<Semester> semesters = response.body();
+                List<String> semesterNames = new ArrayList<>();
                 if (semesters != null) {
-                    ArrayAdapter<String> adapterSemester = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, semesters);
+                    for (int i = 0; i < semesters.size(); i++) {
+                        semesterNames.add(semesters.get(i).getTen());
+                    }
+                    ArrayAdapter<String> adapterSemester = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, semesterNames);
                     mSpinnerSemester.setAdapter(adapterSemester);
                     switch (mCalendar.get(Calendar.MONTH)) {
                         case 1:
@@ -78,10 +84,10 @@ public class ScoreStudentSemesterFragment extends Fragment implements Spinner.On
                         case 4:
                         case 5:
                         case 6:
-                            mSemester = "Học kì 1";
+                            mSemester = "Học Kì 1";
                             break;
                         default:
-                            mSemester = "Học kì 2";
+                            mSemester = "Học Kì 2";
                             break;
                     }
                     mSpinnerSemester.setSelection(adapterSemester.getPosition(mSemester));
@@ -89,25 +95,29 @@ public class ScoreStudentSemesterFragment extends Fragment implements Spinner.On
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Semester>> call, @NonNull Throwable t) {
 
             }
         });
 
         mSpinnerYear.setOnItemSelectedListener(this);
-        Api.getApiService().getYears().enqueue(new Callback<List<String>>() {
+        Api.getApiService().getYears().enqueue(new Callback<List<Year>>() {
             @Override
-            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
-                List<String> years = response.body();
+            public void onResponse(@NonNull Call<List<Year>> call, @NonNull Response<List<Year>> response) {
+                List<Year> years = response.body();
+                List<String> yearNames = new ArrayList<>();
                 if (years != null) {
-                    ArrayAdapter<String> adapterYear = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, years);
+                    for (int i = 0; i < years.size(); i++) {
+                        yearNames.add("Năm học " + years.get(i).getTen());
+                    }
+                    ArrayAdapter<String> adapterYear = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, yearNames);
                     mSpinnerYear.setAdapter(adapterYear);
                     mSpinnerYear.setSelection(adapterYear.getPosition("Năm học " + mCalendar.get(Calendar.YEAR) + "-" + (mCalendar.get(Calendar.YEAR) + 1)));
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Year>> call, @NonNull Throwable t) {
 
             }
         });
@@ -134,12 +144,12 @@ public class ScoreStudentSemesterFragment extends Fragment implements Spinner.On
     private void getData() {
         Api.getApiService().getScores(MainActivity.mIdUser).enqueue(new Callback<List<Score>>() {
             @Override
-            public void onResponse(Call<List<Score>> call, Response<List<Score>> response) {
+            public void onResponse(@NonNull Call<List<Score>> call, @NonNull Response<List<Score>> response) {
                 List<Score> scores = response.body();
                 if (scores != null) {
                     mScores.clear();
                     for (int i = 0; i < scores.size(); i++) {
-                        if (scores.get(i).getYear().equals(mYear) && scores.get(i).getSemester().equals(mSemester)) {
+                        if (("Năm học "+scores.get(i).getYear()).equals(mYear) && scores.get(i).getSemester().equals(mSemester)) {
                             mScores.add(scores.get(i));
                         }
                     }
@@ -148,7 +158,7 @@ public class ScoreStudentSemesterFragment extends Fragment implements Spinner.On
             }
 
             @Override
-            public void onFailure(Call<List<Score>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Score>> call, @NonNull Throwable t) {
 
             }
         });

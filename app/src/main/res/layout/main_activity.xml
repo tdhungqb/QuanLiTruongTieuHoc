@@ -25,12 +25,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_menu_white_36dp" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autocompleteView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_toRightOf="@+id/imgMenu"
+                    android:backgroundTint="@color/colorWhite"
+                    android:completionThreshold="1"
+                    android:hint="Search..."
+                    android:imeOptions="actionDone"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHint="@color/colorWhite"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/imgSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/ic_search_white_36dp"
+                    android:visibility="gone" />
             </android.support.v7.widget.Toolbar>
 
-            <com.miguelcatalan.materialsearchview.MaterialSearchView
-                android:id="@+id/search_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
         </FrameLayout>
 
         <RelativeLayout
@@ -70,8 +89,7 @@
             android:layout_height="80dp"
             android:layout_alignBottom="@+id/background"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/user_avatar" />
+            android:layout_marginLeft="10dp" />
 
         <TextView
             android:id="@+id/tvFullName"

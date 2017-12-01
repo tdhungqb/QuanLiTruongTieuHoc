@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,8 @@ import android.widget.Toast;
 import com.example.hangtrantd.dacnpm.R;
 import com.example.hangtrantd.dacnpm.score.Score;
 import com.example.hangtrantd.dacnpm.util.Api;
+import com.example.hangtrantd.dacnpm.util.Semester;
+import com.example.hangtrantd.dacnpm.util.Year;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class ScoreTeacherSemesterFragment extends Fragment implements Spinner.On
     }
 
     private void initSpinners(View view) {
-        mSpinnerSubject = view.findViewById(R.id.spinnerSubjectScore);
+        mSpinnerSubject = view.findViewById(R.id.spinnerSubjectScoreTeacher);
         mSpinnerSubject.setOnItemSelectedListener(this);
         Api.getApiService().getSubjects().enqueue(new Callback<List<Subject>>() {
             @Override
@@ -97,14 +98,18 @@ public class ScoreTeacherSemesterFragment extends Fragment implements Spinner.On
             }
         });
 
-        mSpinnerSemester = view.findViewById(R.id.spinnerSemesterScore);
+        mSpinnerSemester = view.findViewById(R.id.spinnerSemesterScoreTeacher);
         mSpinnerSemester.setOnItemSelectedListener(this);
-        Api.getApiService().getSemesters().enqueue(new Callback<List<String>>() {
+        Api.getApiService().getSemesters().enqueue(new Callback<List<Semester>>() {
             @Override
-            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
-                List<String> semesters = response.body();
+            public void onResponse(@NonNull Call<List<Semester>> call, @NonNull Response<List<Semester>> response) {
+                List<Semester> semesters = response.body();
+                List<String> semesterNames = new ArrayList<>();
                 if (semesters != null) {
-                    ArrayAdapter<String> adapterSemester = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, semesters);
+                    for (int i = 0; i < semesters.size(); i++) {
+                        semesterNames.add(semesters.get(i).getTen());
+                    }
+                    ArrayAdapter<String> adapterSemester = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, semesterNames);
                     mSpinnerSemester.setAdapter(adapterSemester);
                     switch (mCalendar.get(Calendar.MONTH)) {
                         case 1:
@@ -124,27 +129,30 @@ public class ScoreTeacherSemesterFragment extends Fragment implements Spinner.On
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Semester>> call, @NonNull Throwable t) {
 
             }
         });
 
-        mSpinnerYear = view.findViewById(R.id.spinnerYearScore);
+        mSpinnerYear = view.findViewById(R.id.spinnerYearScoreTeacher);
         mSpinnerYear.setOnItemSelectedListener(this);
-        Api.getApiService().getYears().enqueue(new Callback<List<String>>() {
+        Api.getApiService().getYears().enqueue(new Callback<List<Year>>() {
             @Override
-            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
-                List<String> years = response.body();
+            public void onResponse(@NonNull Call<List<Year>> call, @NonNull Response<List<Year>> response) {
+                List<Year> years = response.body();
+                List<String> yearNames = new ArrayList<>();
                 if (years != null) {
-                    ArrayAdapter<String> adapterYear = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, years);
+                    for (int i = 0; i < years.size(); i++) {
+                        yearNames.add("Năm học "+years.get(i).getTen());
+                    }
+                    ArrayAdapter<String> adapterYear = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, yearNames);
                     mSpinnerYear.setAdapter(adapterYear);
                     mSpinnerYear.setSelection(adapterYear.getPosition("Năm học " + mCalendar.get(Calendar.YEAR) + "-" + (mCalendar.get(Calendar.YEAR) + 1)));
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
-
+            public void onFailure(@NonNull Call<List<Year>> call, @NonNull Throwable t) {
             }
         });
     }
@@ -156,13 +164,13 @@ public class ScoreTeacherSemesterFragment extends Fragment implements Spinner.On
         mEdtFinalSemester.setText("");
         mTvAverageSemester.setText("");
         switch (adapterView.getId()) {
-            case R.id.spinnerSubjectScore:
+            case R.id.spinnerSubjectScoreTeacher:
                 mSubject = mSpinnerSubject.getSelectedItem().toString();
                 break;
-            case R.id.spinnerSemesterScore:
+            case R.id.spinnerSemesterScoreTeacher:
                 mSemester = mSpinnerSemester.getSelectedItem().toString();
                 break;
-            case R.id.spinnerYearScore:
+            case R.id.spinnerYearScoreTeacher:
                 mYear = mSpinnerYear.getSelectedItem().toString();
                 break;
         }
@@ -175,7 +183,7 @@ public class ScoreTeacherSemesterFragment extends Fragment implements Spinner.On
         String finalSemester = "";
         for (int j = 0; j < scores.size(); j++) {
             if (scores.get(j).getNameSubject().equals(mSubject)) {
-                if (scores.get(j).getYear().equals(mYear)) {
+                if (("Năm học "+scores.get(j).getYear()).equals(mYear)) {
                     if (scores.get(j).getSemester().equals(mSemester)) {
                         if (scores.get(j).getMouth() != null) {
                             mEdtMouth.setText(scores.get(j).getMouth());
@@ -220,7 +228,7 @@ public class ScoreTeacherSemesterFragment extends Fragment implements Spinner.On
                new ScoreTeacherSemesterFragment();
                 mBtnSave.setEnabled(false);
                 enableEdt(mEdts, false);
-                Api.getApiService().updateScore(ScoreTeacherFragment.getIdStudent(), mSubject, ScoreTeacherFragment.getClazzStudent(), mSemester, mYear, mEdtMouth.getText().toString(), mEdtMidSemester.getText().toString(), mEdtFinalSemester.getText().toString()).enqueue(new Callback<String>() {
+                Api.getApiService().updateScore(ScoreTeacherFragment.getIdStudent(), mSubject, ScoreTeacherFragment.getClazzStudent(), mSemester, mYear.substring(8,17), mEdtMouth.getText().toString(), mEdtMidSemester.getText().toString(), mEdtFinalSemester.getText().toString()).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         Toast.makeText(getActivity(), "Update success!", Toast.LENGTH_SHORT).show();
@@ -248,7 +256,6 @@ public class ScoreTeacherSemesterFragment extends Fragment implements Spinner.On
                 public void onResponse(@NonNull Call<List<Score>> call, @NonNull Response<List<Score>> response) {
                     if (response.body() != null) {
                         mScores = response.body();
-                        Log.d("eeeeeeee",mScores.get(4).getNameSubject()+","+mScores.get(4).getMidSemester());
                         setData(mScores);
                     }
                 }

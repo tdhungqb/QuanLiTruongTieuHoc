@@ -40,6 +40,7 @@ public class InforAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         InforViewHolder inforViewHolder = (InforViewHolder) holder;
         inforViewHolder.mTvContent.setText(mInfors.get(position).getContent());
+        inforViewHolder.mTvDate.setText(mInfors.get(position).getDate());
         inforViewHolder.mTvTitle.setText(mInfors.get(position).getTitle());
         Picasso.with(mContext).load(mInfors.get(position).getImage()).into(inforViewHolder.mImgDes);
     }
@@ -51,12 +52,14 @@ public class InforAdapter extends RecyclerView.Adapter {
 
     class InforViewHolder extends RecyclerView.ViewHolder {
         private final TextView mTvTitle;
+        private final TextView mTvDate;
         private final TextView mTvContent;
         private final ImageView mImgDes;
 
         InforViewHolder(View itemView) {
             super(itemView);
             mTvTitle = itemView.findViewById(R.id.tvTitle);
+            mTvDate = itemView.findViewById(R.id.tvDate);
             mTvContent = itemView.findViewById(R.id.tvContent);
             mImgDes = itemView.findViewById(R.id.imgDes);
             itemView.setOnClickListener(new View.OnClickListener() {

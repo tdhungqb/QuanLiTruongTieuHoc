@@ -12,14 +12,17 @@ public class Infor {
     private int id;
     @SerializedName("ten")
     private String title;
+    @SerializedName("ngay")
+    private String date;
     @SerializedName("mota")
     private String content;
-    @SerializedName("hinhanh")
+    @SerializedName("hinh")
     private String image;
 
-    public Infor(int id, String title, String content, String image) {
+    public Infor(int id, String title, String date,String content, String image) {
         this.id = id;
         this.title = title;
+        this.date = date;
         this.content = content;
         this.image = image;
     }
@@ -54,5 +57,13 @@ public class Infor {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

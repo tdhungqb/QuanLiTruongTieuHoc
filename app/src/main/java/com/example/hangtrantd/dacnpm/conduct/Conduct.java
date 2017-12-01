@@ -16,15 +16,12 @@ public class Conduct {
     private String semester;
     @SerializedName("lop")
     private String clazz;
-    @SerializedName("Ghichu")
-    private String note;
 
-    public Conduct(String conduct, String year, String semester, String clazz, String note) {
+    public Conduct(String conduct, String year, String semester, String clazz) {
         this.conduct = conduct;
         this.year = year;
         this.semester = semester;
         this.clazz = clazz;
-        this.note = note;
     }
 
     public String getConduct() {
@@ -57,13 +54,5 @@ public class Conduct {
 
     public void setClazz(String clazz) {
         this.clazz = clazz;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 }

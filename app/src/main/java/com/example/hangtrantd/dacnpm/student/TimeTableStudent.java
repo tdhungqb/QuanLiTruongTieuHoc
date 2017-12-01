@@ -18,6 +18,8 @@ public class TimeTableStudent {
     private String lesson;
     @SerializedName("monhoc")
     private String subject;
+    @SerializedName("lop")
+    private String clazz;
 
     public TimeTableStudent(String date, String year, String semester, String lesson, String subject) {
         this.date = date;
@@ -65,5 +67,13 @@ public class TimeTableStudent {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(String clazz) {
+        this.clazz = clazz;
     }
 }

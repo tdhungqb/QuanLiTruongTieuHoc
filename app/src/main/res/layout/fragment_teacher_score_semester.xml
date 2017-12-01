@@ -10,7 +10,7 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/spinnerYearScore"
+                android:id="@+id/spinnerYearScoreTeacher"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:background="#727fd2"
@@ -22,12 +22,12 @@
                 android:id="@+id/imgArrow1"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_toRightOf="@+id/spinnerYearScore"
+                android:layout_toRightOf="@+id/spinnerYearScoreTeacher"
                 android:background="#727fd2"
                 android:src="@drawable/ic_arrow_drop_down_black_24dp" />
 
             <Spinner
-                android:id="@+id/spinnerSemesterScore"
+                android:id="@+id/spinnerSemesterScoreTeacher"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
@@ -40,13 +40,13 @@
                 android:id="@+id/imgArrow2"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_toRightOf="@+id/spinnerSemesterScore"
+                android:layout_toRightOf="@+id/spinnerSemesterScoreTeacher"
                 android:background="#727fd2"
                 android:src="@drawable/ic_arrow_drop_down_black_24dp" />
 
 
             <Spinner
-                android:id="@+id/spinnerSubjectScore"
+                android:id="@+id/spinnerSubjectScoreTeacher"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
@@ -59,7 +59,7 @@
                 android:id="@+id/imgArrow3"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_toRightOf="@+id/spinnerSubjectScore"
+                android:layout_toRightOf="@+id/spinnerSubjectScoreTeacher"
                 android:background="#727fd2"
                 android:src="@drawable/ic_arrow_drop_down_black_24dp" />
         </RelativeLayout>

@@ -8,14 +8,18 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class NameStudent {
-    @SerializedName("id")
+    @SerializedName("idHS")
     private String id;
-    @SerializedName("hoten")
+    @SerializedName("tenHS")
     private String name;
     @SerializedName("namhoc")
     private String year;
     @SerializedName("lop")
     private String clazz;
+
+    public NameStudent(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;

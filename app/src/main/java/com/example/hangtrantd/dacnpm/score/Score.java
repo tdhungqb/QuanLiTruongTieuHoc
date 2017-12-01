@@ -10,9 +10,9 @@ import com.google.gson.annotations.SerializedName;
 public class Score {
     @SerializedName("maHS")
     private String idStudent;
-    @SerializedName("maMonhoc")
+    @SerializedName("id")
     private String idSubject;
-    @SerializedName("tenMonhoc")
+    @SerializedName("monhoc")
     private String nameSubject;
     @SerializedName("heso")
     private String factor;
@@ -22,11 +22,11 @@ public class Score {
     private String year;
     @SerializedName("lop")
     private String clazz;
-    @SerializedName("mieng")
+    @SerializedName("loaidiem1")
     private String mouth;
-    @SerializedName("giuaki")
+    @SerializedName("loaidiem2")
     private String midSemester;
-    @SerializedName("cuoiki")
+    @SerializedName("loaidiem3")
     private String finalSemester;
 
     public Score(String idStudent, String nameSubject, String factor, String semester, String year, String clazz, String mouth, String midSemester, String finalSemester) {

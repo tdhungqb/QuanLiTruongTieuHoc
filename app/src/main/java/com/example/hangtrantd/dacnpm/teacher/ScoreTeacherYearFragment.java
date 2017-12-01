@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ import com.example.hangtrantd.dacnpm.score.Score;
 import com.example.hangtrantd.dacnpm.score.ScoreYear;
 import com.example.hangtrantd.dacnpm.score.ScoreYearAdapter;
 import com.example.hangtrantd.dacnpm.util.Api;
+import com.example.hangtrantd.dacnpm.util.Year;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -52,7 +52,6 @@ public class ScoreTeacherYearFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_score_year, container, false);
-       Log.d("wwwwwwwwww","wwwwww");
         mRecyclerView = mView.findViewById(R.id.recyclerScore);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -67,19 +66,23 @@ public class ScoreTeacherYearFragment extends Fragment {
 
     private void initSpinner(View view) {
         mSpinnerYear = view.findViewById(R.id.spinnerYearSummery);
-        Api.getApiService().getYears().enqueue(new Callback<List<String>>() {
+        Api.getApiService().getYears().enqueue(new Callback<List<Year>>() {
             @Override
-            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
-                List<String> years = response.body();
+            public void onResponse(@NonNull Call<List<Year>> call, @NonNull Response<List<Year>> response) {
+                List<Year> years = response.body();
+                List<String> yearNames = new ArrayList<>();
                 if (years != null) {
-                    ArrayAdapter<String> adapterYear = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, years);
+                    for (int i = 0; i < years.size(); i++) {
+                        yearNames.add("Năm học "+years.get(i).getTen());
+                    }
+                    ArrayAdapter<String> adapterYear = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, yearNames);
                     mSpinnerYear.setAdapter(adapterYear);
                     mSpinnerYear.setSelection(adapterYear.getPosition("Năm học " + mCalendar.get(Calendar.YEAR) + "-" + (mCalendar.get(Calendar.YEAR) + 1)));
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Year>> call, @NonNull Throwable t) {
 
             }
         });
@@ -124,7 +127,7 @@ public class ScoreTeacherYearFragment extends Fragment {
                     mScores = response.body();
                     mScoreFilters.clear();
                     for (int i = 0; i < mScores.size(); i++) {
-                        if (mScores.get(i).getYear().equals(mYear)) {
+                        if (("Năm học "+mScores.get(i).getYear()).equals(mYear)) {
                             if (i + 1 < mScores.size() && mScores.get(i).getNameSubject().equals(mScores.get(i + 1).getNameSubject())) {
                                 String score = sumScore(mScores.get(i).getMouth(), mScores.get(i).getMidSemester(), mScores.get(i).getFinalSemester(),
                                         mScores.get(i + 1).getMouth(), mScores.get(i + 1).getMidSemester(), mScores.get(i + 1).getFinalSemester());

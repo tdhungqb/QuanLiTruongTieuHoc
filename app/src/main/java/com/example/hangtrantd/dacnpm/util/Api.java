@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class Api {
-    private static String BASE_URL = "http://172.17.19.104";
+    private static String BASE_URL = "https://webtieuhoc.000webhostapp.com/api/";
 
     private static Retrofit retrofit = null;
 

@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 
 public class DetailInforFragment extends Fragment {
     private TextView mTvTitle;
+    private TextView mTvDate;
     private TextView mTvContent;
     private ImageView mImgInfor;
     private Infor mInfor;
@@ -34,6 +35,7 @@ public class DetailInforFragment extends Fragment {
 
     private void initViews(View view) {
         mTvTitle = view.findViewById(R.id.tvTilteInfor);
+        mTvDate = view.findViewById(R.id.tvDate);
         mTvContent = view.findViewById(R.id.tvContentInfor);
         mImgInfor = view.findViewById(R.id.imgInfor);
     }
@@ -42,9 +44,9 @@ public class DetailInforFragment extends Fragment {
         mInfor = InforFragment.getInfor();
         if (mInfor != null) {
             mTvTitle.setText(mInfor.getTitle());
+            mTvDate.setText(mInfor.getDate());
             mTvContent.setText(mInfor.getContent());
             Picasso.with(getActivity()).load(mInfor.getImage()).into(mImgInfor);
-
         }
     }
 }

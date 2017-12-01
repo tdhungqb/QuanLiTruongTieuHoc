@@ -39,6 +39,15 @@ public class ShowStudentAdapter extends RecyclerView.Adapter {
         studentViewHolder.mTvName.setText(mStudents.get(position).getName());
     }
 
+    public int getPosition(String id) {
+        for (int i = 0; i < mStudents.size(); i++) {
+            if (mStudents.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     @Override
     public int getItemCount() {
         return mStudents.size();

@@ -61,43 +61,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
+                    android:digits="qwertzuiopasdfghjklyxcvbnm"
                     android:enabled="false"
+                    android:inputType="text"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text_size_minimum"
                     android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:text="Lớp:"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/text_size" />
-
-                <EditText
-                    android:id="@+id/edtClassStudent"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="6"
-                    android:enabled="false"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/text_size"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/spinnerClassStudent"
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_weight="6"
-                    android:popupBackground="#47abab"
-                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -125,7 +94,7 @@
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:id="@+id/radioBtnMale"
+                            android:id="@+id/radioBtnMaleStudent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:clickable="false"
@@ -133,7 +102,7 @@
                             android:textStyle="bold" />
 
                         <RadioButton
-                            android:id="@+id/radioBtnFemale"
+                            android:id="@+id/radioBtnFemaleStudent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="30dp"
@@ -171,12 +140,12 @@
                         android:textSize="@dimen/text_size"
                         android:textStyle="bold" />
 
-                    <ImageButton
-                        android:id="@+id/imgBtnDate"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/common_image_date" />
+                    <!--<ImageButton-->
+                        <!--android:id="@+id/imgBtnDate"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:background="@drawable/common_image_date" />-->
                 </LinearLayout>
             </FrameLayout>
 
@@ -192,6 +161,28 @@
                     android:text="@string/address"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text_size_minimum" />
+
+                <LinearLayout
+                    android:id="@+id/llContaint"
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <Spinner
+                        android:id="@+id/spinnerProvence"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:popupBackground="#47abab"
+                        android:visibility="gone" />
+
+                    <Spinner
+                        android:id="@+id/spinnerDistrict"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:popupBackground="#47abab"
+                        android:visibility="gone" />
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/edtAddressStudent"
@@ -223,10 +214,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:enabled="false"
+                    android:inputType="phone"
+                    android:maxLength="11"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text_size_minimum"
-                    android:textStyle="bold"
-                    android:inputType="phone"/>
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -322,13 +314,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:padding="5dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="@string/father_job"
+                    android:text="Nghề nghiệp cha:"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text_size" />
 
@@ -341,6 +334,14 @@
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text_size"
                     android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerFatherJob"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="6"
+                    android:popupBackground="#47abab"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -370,13 +371,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:padding="5dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="@string/mother_job"
+                    android:text="Nghề nghiệp mẹ:"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text_size" />
 
@@ -389,6 +391,14 @@
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text_size"
                     android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerMotherJob"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="6"
+                    android:popupBackground="#47abab"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <RelativeLayout

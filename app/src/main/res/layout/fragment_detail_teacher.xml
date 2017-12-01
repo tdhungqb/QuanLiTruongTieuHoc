@@ -28,14 +28,15 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text_size_minimum" />
 
-            <TextView
-                android:id="@+id/tvIdTeacher"
+            <EditText
+                android:id="@+id/edtIdTeacher"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text_size"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:enabled="false"/>
         </LinearLayout>
 
         <LinearLayout
@@ -56,7 +57,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
+                android:digits="qwertzuiopasdfghjklyxcvbnm"
                 android:enabled="false"
+                android:inputType="text"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text_size"
                 android:textStyle="bold" />
@@ -87,7 +90,7 @@
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:id="@+id/radioBtnMale"
+                        android:id="@+id/radioBtnMaleTeacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:clickable="false"
@@ -95,7 +98,7 @@
                         android:textStyle="bold" />
 
                     <RadioButton
-                        android:id="@+id/radioBtnFemale"
+                        android:id="@+id/radioBtnFemaleTeacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dp"
@@ -104,7 +107,7 @@
                         android:textStyle="bold" />
                 </RadioGroup>
             </LinearLayout>
-    </LinearLayout>
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -132,13 +135,6 @@
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text_size"
                     android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/imgBtnDate"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/common_image_date" />
             </LinearLayout>
         </FrameLayout>
 
@@ -154,6 +150,27 @@
                 android:text="@string/address"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text_size" />
+            <LinearLayout
+                android:id="@+id/llContaint"
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_weight="6"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/spinnerProvence"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:popupBackground="#47abab"
+                    android:visibility="gone" />
+
+                <Spinner
+                    android:id="@+id/spinnerDistrict"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:popupBackground="#47abab"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/edtAddressTeacher"
@@ -185,6 +202,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
                 android:enabled="false"
+                android:maxLength="11"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text_size"
                 android:textStyle="bold" />
@@ -200,12 +218,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:text="@string/nation"
+                android:text="Loại môn học"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text_size" />
 
             <EditText
-                android:id="@+id/edtNationTeacher"
+                android:id="@+id/edtSubjectTeacher"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
@@ -215,40 +233,7 @@
                 android:textStyle="bold" />
 
             <Spinner
-                android:id="@+id/spinnerNationTeacher"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_weight="6"
-                android:popupBackground="#47abab"
-                android:visibility="gone" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:text="@string/religion"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/text_size" />
-
-            <EditText
-                android:id="@+id/edtReligionTeacher"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:enabled="false"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/text_size"
-                android:textStyle="bold" />
-
-            <Spinner
-                android:id="@+id/spinnerReligionTeacher"
+                android:id="@+id/spinnerSubjectTeacher"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_weight="6"
@@ -262,14 +247,14 @@
             android:layout_margin="20dp">
 
             <Button
-                android:id="@+id/btnEdit"
+                android:id="@+id/btnEditTeacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_button_edit_save"
                 android:text="edit" />
 
             <Button
-                android:id="@+id/btnSave"
+                android:id="@+id/btnSaveTeacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

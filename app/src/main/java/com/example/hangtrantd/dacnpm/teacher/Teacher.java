@@ -16,18 +16,15 @@ public class Teacher {
     private String address;
     @SerializedName("sodienthoai")
     private String phone;
-    @SerializedName("loaimonhoc_id")
+    @SerializedName("loaimonhoc")
     private String typeCourse;
     @SerializedName("gioitinh")
     private String gender;
     @SerializedName("ngaysinh")
     private String birthDay;
-    @SerializedName("tongiao")
-    private String religion;
-    @SerializedName("dantoc")
-    private String nation;
 
-    public Teacher(String id, String name, String address, String phone, String gender, String birthDay, String religion, String nation) {
+
+    public Teacher(String id, String name, String address, String phone, String typeCourse, String gender, String birthDay) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -35,8 +32,6 @@ public class Teacher {
         this.typeCourse = typeCourse;
         this.gender = gender;
         this.birthDay = birthDay;
-        this.religion = religion;
-        this.nation = nation;
     }
 
     public String getId() {
@@ -59,12 +54,20 @@ public class Teacher {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getPhone() {
         return phone;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getBirthDay() {
+        return birthDay;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setPhone(String phone) {
@@ -79,35 +82,12 @@ public class Teacher {
         this.typeCourse = typeCourse;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    public String getBirthDay() {
-        return birthDay;
     }
 
     public void setBirthDay(String birthDay) {
         this.birthDay = birthDay;
     }
-
-    public String getReligion() {
-        return religion;
-    }
-
-    public void setReligion(String religion) {
-        this.religion = religion;
-    }
-
-    public String getNation() {
-        return nation;
-    }
-
-    public void setNation(String nation) {
-        this.nation = nation;
-    }
 }
+

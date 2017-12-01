@@ -1,6 +1,5 @@
 package com.example.hangtrantd.dacnpm.teacher;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,9 +12,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,15 +23,14 @@ import com.example.hangtrantd.dacnpm.R;
 import com.example.hangtrantd.dacnpm.home.MainActivity;
 import com.example.hangtrantd.dacnpm.util.Api;
 import com.example.hangtrantd.dacnpm.util.Country;
+import com.example.hangtrantd.dacnpm.util.MyAdrress;
+import com.example.hangtrantd.dacnpm.util.SubjectType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,92 +44,128 @@ import static com.example.hangtrantd.dacnpm.home.MainActivity.mIdUser;
  */
 
 public class DetailTeacherFragment extends Fragment implements Spinner.OnItemSelectedListener, RadioButton.OnClickListener {
-    @Bind(R.id.tvIdTeacher)
-    TextView mTvId;
-    @Bind(R.id.edtNameTeacher)
+    TextView mEdtId;
     EditText mEdtName;
-    @Bind(R.id.edtAddressTeacher)
     EditText mEdtAddress;
-    @Bind(R.id.edtPhoneTeacher)
     EditText mEdtPhone;
-    @Bind(R.id.edtBirthdayTeacher)
     EditText mEdtBirthDay;
-    @Bind(R.id.edtNationTeacher)
-    EditText mEdtNation;
-    @Bind(R.id.edtReligionTeacher)
-    EditText mEdtReligion;
-
-    @Bind(R.id.radioBtnMale)
+    EditText mEdtSubject;
     RadioButton mRadioButtonMale;
-    @Bind(R.id.radioBtnFemale)
     RadioButton mRadioButtonFemale;
-    @Bind(R.id.spinnerNationTeacher)
-    Spinner mSpinnerNation;
-    @Bind(R.id.spinnerReligionTeacher)
-    Spinner mSpinnerReligion;
-    @Bind(R.id.imgBtnDate)
-    ImageButton mImgBtnDate;
-    @Bind(R.id.btnEdit)
+    Spinner mSpinnerProvence;
+    Spinner mSpinnerDistrict;
+    Spinner mSpinnerSubjectType;
     Button mBtnEdit;
-    @Bind(R.id.btnSave)
     Button mBtnSave;
 
     private List<EditText> mEdts;
-    private Calendar mCalendar = new GregorianCalendar();
-    private Boolean mEnabled = false;
     private Integer countSpinner = 0;
     private Teacher mTeacher;
+    private String mProvence = "";
+    private String mDistrict = "";
+    private String mSubjectType = "";
+    private LinearLayout mContainer;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail_teacher, container, false);
         ButterKnife.bind(getActivity());
-        initViews();
+        initViews(view);
         getAPITeacher();
         handleViews();
         return view;
     }
 
-    private void initViews() {
-        mEdts = Arrays.asList(mEdtName, mEdtAddress, mEdtPhone, mEdtNation, mEdtReligion);
-        mSpinnerNation.setOnItemSelectedListener(this);
-        mSpinnerReligion.setOnItemSelectedListener(this);
-        mRadioButtonMale.setOnClickListener(this);
-        mRadioButtonFemale.setOnClickListener(this);
+    private void initViews(View view) {
+        mEdtId = view.findViewById(R.id.edtIdTeacher);
+        mEdtName = view.findViewById(R.id.edtNameTeacher);
+        mEdtAddress = view.findViewById(R.id.edtAddressTeacher);
+        mEdtPhone = view.findViewById(R.id.edtPhoneTeacher);
+        mEdtBirthDay = view.findViewById(R.id.edtBirthdayTeacher);
+        mBtnEdit = view.findViewById(R.id.btnEditTeacher);
+        mBtnSave = view.findViewById(R.id.btnSaveTeacher);
+        mEdtSubject = view.findViewById(R.id.edtSubjectTeacher);
+        mContainer = view.findViewById(R.id.llContaint);
+        mEdts = Collections.singletonList(mEdtPhone);
+        mSpinnerProvence = view.findViewById(R.id.spinnerProvence);
+        mSpinnerProvence.setOnItemSelectedListener(this);
+        mSpinnerDistrict = view.findViewById(R.id.spinnerDistrict);
+        mSpinnerDistrict.setOnItemSelectedListener(this);
+        mSpinnerSubjectType = view.findViewById(R.id.spinnerSubjectTeacher);
+        mSpinnerSubjectType.setOnItemSelectedListener(this);
+        mRadioButtonMale = view.findViewById(R.id.radioBtnMaleTeacher);
+        mRadioButtonFemale = view.findViewById(R.id.radioBtnFemaleTeacher);
     }
 
     private void getAPITeacher() {
-        Api.getApiService().getInforTeacher(mIdUser).enqueue(new Callback<Teacher>() {
+
+        Api.getApiService().getInforTeacher(mIdUser).enqueue(new Callback<List<Teacher>>() {
             @Override
-            public void onResponse(@NonNull Call<Teacher> call, @NonNull Response<Teacher> response) {
-                mTeacher = response.body();
-                if (mTeacher != null) {
+            public void onResponse(@NonNull Call<List<Teacher>> call, @NonNull Response<List<Teacher>> response) {
+                if (response.body() != null && response.body().size() != 0) {
+                    mTeacher = response.body().get(0);
                     setData(mTeacher);
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Teacher> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Teacher>> call, @NonNull Throwable t) {
+            }
+        });
+
+        Api.getApiService().getSubjectTypes().enqueue(new Callback<List<SubjectType>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<SubjectType>> call, @NonNull Response<List<SubjectType>> response) {
+                List<SubjectType> subjectTypes = response.body();
+                List<String> subjectNames = new ArrayList<>();
+                if (subjectTypes != null) {
+                    for (int i = 0; i < subjectTypes.size(); i++) {
+                        subjectNames.add(subjectTypes.get(i).getName());
+                    }
+                    ArrayAdapter<String> adapterYear = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, subjectNames);
+                    mSpinnerSubjectType.setAdapter(adapterYear);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<SubjectType>> call, @NonNull Throwable t) {
+
             }
         });
     }
 
     private void setData(Teacher teacher) {
         if (teacher != null) {
-            mTvId.setText(teacher.getId());
+            mEdtId.setText(teacher.getId());
             mEdtName.setText(teacher.getName());
-            mEdtAddress.setText(teacher.getAddress());
+            Api.getApiService().getDistrictName(teacher.getAddress()).enqueue(new Callback<MyAdrress>() {
+                @Override
+                public void onResponse(@NonNull Call<MyAdrress> call, @NonNull Response<MyAdrress> response) {
+                    MyAdrress address = response.body();
+                    if (address != null) {
+                        mDistrict = address.getDistrict();
+                        mProvence = address.getProvence();
+                        mEdtAddress.setText(mDistrict + ", " + mProvence);
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<MyAdrress> call, @NonNull Throwable t) {
+
+                }
+            });
+
             mEdtPhone.setText(teacher.getPhone());
             mEdtBirthDay.setText(teacher.getBirthDay());
-            mEdtNation.setText(teacher.getNation());
-            mEdtReligion.setText(teacher.getReligion());
+            mEdtSubject.setText(teacher.getTypeCourse());
 
             if (teacher.getGender().equals("0")) {
                 mRadioButtonMale.setChecked(true);
             } else {
                 mRadioButtonFemale.setChecked(true);
             }
+
 
             Api.getApiService().getNations().enqueue(new Callback<List<Country>>() {
                 @Override
@@ -143,9 +176,7 @@ public class DetailTeacherFragment extends Fragment implements Spinner.OnItemSel
                         for (int i = 0; i < countries.size(); i++) {
                             nations.add(countries.get(i).getName());
                         }
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.item_spinner, nations);
-                        mSpinnerNation.setAdapter(adapter);
-                        mSpinnerNation.setSelection(adapter.getPosition(mEdtNation.getText().toString()));
+                        new ArrayAdapter<>(getActivity(), R.layout.item_spinner, nations);
                     }
                 }
 
@@ -163,9 +194,7 @@ public class DetailTeacherFragment extends Fragment implements Spinner.OnItemSel
                         for (int i = 0; i < countries.size(); i++) {
                             religions.add(countries.get(i).getName());
                         }
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.item_spinner, religions);
-                        mSpinnerReligion.setAdapter(adapter);
-                        mSpinnerReligion.setSelection(adapter.getPosition(mEdtReligion.getText().toString()));
+                         new ArrayAdapter<>(getActivity(), R.layout.item_spinner, religions);
                     }
                 }
 
@@ -180,48 +209,55 @@ public class DetailTeacherFragment extends Fragment implements Spinner.OnItemSel
         mBtnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Api.getApiService().getProvences().enqueue(new Callback<List<String>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+                        if (response.body()!= null) {
+                            List<String> provences = response.body();
+                            assert provences != null;
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.item_spinner, provences);
+                            mSpinnerProvence.setAdapter(adapter);
+                            mSpinnerProvence.setSelection(adapter.getPosition(mProvence));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
+
+                    }
+                });
+
                 enableEdt(mEdts, true);
                 changeEdt(mEdts);
-                mEdtNation.setVisibility(View.GONE);
-                mEdtReligion.setVisibility(View.GONE);
-                mRadioButtonMale.setClickable(true);
-                mRadioButtonFemale.setClickable(true);
-                mSpinnerNation.setVisibility(View.VISIBLE);
-                mSpinnerReligion.setVisibility(View.VISIBLE);
-                mEnabled = true;
+                mContainer.setVisibility(View.VISIBLE);
+                mEdtAddress.setVisibility(View.GONE);
+                mEdtSubject.setVisibility(View.GONE);
+                mSpinnerSubjectType.setVisibility(View.VISIBLE);
+                mSpinnerProvence.setVisibility(View.VISIBLE);
             }
         });
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) getActivity()).setFullName(mEdtName.getText().toString());
-
-                enableEdt(mEdts, false);
-                mEdtNation.setVisibility(View.VISIBLE);
-                mEdtReligion.setVisibility(View.VISIBLE);
-                mBtnSave.setEnabled(false);
-                mRadioButtonMale.setClickable(false);
-                mRadioButtonFemale.setClickable(false);
-                mSpinnerNation.setVisibility(View.GONE);
-                mSpinnerReligion.setVisibility(View.GONE);
-                mEnabled = false;
-
                 Pattern pattern = Pattern.compile("^[0-9]*$");
-                if (mEdtName.getText().toString().equals("") || mEdtAddress.getText().toString().equals("") ||
-                        mEdtPhone.getText().toString().equals("")) {
+                if (mEdtPhone.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Yêu cầu nhập đủ thông tin!", Toast.LENGTH_SHORT).show();
                 } else if (!pattern.matcher(mEdtPhone.getText().toString()).matches()) {
                     Toast.makeText(getActivity(), "Số điện thoại không hợp lệ!", Toast.LENGTH_SHORT).show();
                     mEdtPhone.setText("");
                 } else {
+                    ((MainActivity) getActivity()).setFullName(mEdtName.getText().toString());
+                    enableEdt(mEdts, false);
+                    mContainer.setVisibility(View.GONE);
+                    mEdtAddress.setVisibility(View.VISIBLE);
+                    mEdtSubject.setVisibility(View.VISIBLE);
                     mBtnSave.setEnabled(false);
-                    String gender;
-                    if (mRadioButtonMale.isChecked()) {
-                        gender = "0";
-                    } else {
-                        gender = "1";
-                    }
-                    Api.getApiService().updateTeacher(mTvId.getText().toString(), mEdtName.getText().toString(), mEdtAddress.getText().toString(), mEdtPhone.getText().toString(), gender, mEdtBirthDay.getText().toString(), mSpinnerReligion.getSelectedItem().toString(), mSpinnerNation.getSelectedItem().toString()).enqueue(new Callback<String>() {
+                    mSpinnerProvence.setVisibility(View.GONE);
+                    mSpinnerDistrict.setVisibility(View.GONE);
+                    mSpinnerSubjectType.setVisibility(View.GONE);
+
+                    mBtnSave.setEnabled(false);
+                    Api.getApiService().updateTeacher(mEdtId.getText().toString(), mSubjectType, "Đà Nẵng", mEdtPhone.getText().toString()).enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                             Toast.makeText(getActivity(), "Update success!!", Toast.LENGTH_SHORT).show();
@@ -232,29 +268,6 @@ public class DetailTeacherFragment extends Fragment implements Spinner.OnItemSel
                             Toast.makeText(getActivity(), "Update false", Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
-            }
-        });
-
-        mImgBtnDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mEnabled) {
-                    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                              int dayOfMonth) {
-                            mCalendar.set(Calendar.YEAR, year);
-                            mCalendar.set(Calendar.MONTH, monthOfYear);
-                            mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                            String birthDay = year + "-" + monthOfYear + "-" + dayOfMonth;
-                            mEdtBirthDay.setText(birthDay);
-                            mBtnSave.setEnabled(true);
-                        }
-                    };
-                    Calendar calendar = Calendar.getInstance();
-                    new DatePickerDialog(getActivity(), date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
                 }
             }
         });
@@ -290,13 +303,39 @@ public class DetailTeacherFragment extends Fragment implements Spinner.OnItemSel
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         countSpinner++;
-        if (countSpinner > 2) {
+        if (countSpinner > 0) {
             mBtnSave.setEnabled(true);
-            if (adapterView.getId() == R.id.spinnerNationTeacher) {
-                mEdtNation.setText(mSpinnerNation.getSelectedItem().toString());
+
+            if (adapterView.getId() == R.id.spinnerProvence) {
+                mSpinnerDistrict.setVisibility(View.VISIBLE);
+                mProvence = mSpinnerProvence.getSelectedItem().toString();
+                Api.getApiService().getDistricts(mProvence).enqueue(new Callback<List<String>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+                        if (response.body() == null) {
+                            return;
+                        }
+                        List<String> districts = response.body();
+                        assert districts != null;
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.item_spinner, districts);
+                        mSpinnerDistrict.setAdapter(adapter);
+                        mSpinnerDistrict.setSelection(adapter.getPosition(mDistrict));
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
+                    }
+                });
             }
-            if (adapterView.getId() == R.id.spinnerReligionTeacher) {
-                mEdtReligion.setText(mSpinnerReligion.getSelectedItem().toString());
+            if (adapterView.getId() == R.id.spinnerDistrict) {
+                mSpinnerDistrict.setVisibility(View.VISIBLE);
+                mDistrict = mSpinnerDistrict.getSelectedItem().toString();
+                mEdtAddress.setText(mDistrict + ", " + mProvence);
+            }
+
+            if (adapterView.getId() == R.id.spinnerSubjectTeacher) {
+                mSubjectType = mSpinnerSubjectType.getSelectedItem().toString();
+                mEdtSubject.setText(mSubjectType);
             }
         }
     }

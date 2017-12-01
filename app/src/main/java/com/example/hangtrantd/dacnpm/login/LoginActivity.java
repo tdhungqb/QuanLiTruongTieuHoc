@@ -13,6 +13,8 @@ import com.example.hangtrantd.dacnpm.R;
 import com.example.hangtrantd.dacnpm.home.MainActivity;
 import com.example.hangtrantd.dacnpm.util.Api;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,10 +46,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getUser() {
         Api.getApiService().getInforUser(mEdtUserName.getText().toString())
-                .enqueue(new Callback<User>() {
+                .enqueue(new Callback<List<User>>() {
                     @Override
-                    public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
-                        mUser = response.body();
+                    public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
+                        if (response.body() != null&& response.body().size()!=0) {
+                            mUser = response.body().get(0);
+                        }
                         if (mUser != null) {
                             if (checkValidValue(mUser)) {
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -62,8 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
-
+                    public void onFailure(@NonNull Call<List<User>> call, @NonNull Throwable t) {
                     }
                 });
     }

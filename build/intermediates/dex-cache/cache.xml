@@ -3,21 +3,12 @@
 
     <item
         is-multidex="false"
-        jar="/home/hangtrantd/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/7.0.1/d5d13ea991eab0252e3710e5df3d6a9d4b21d461/butterknife-7.0.1.jar"
+        jar="/home/hangtrantd/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.4.0/40340c0748190fe897baf7bffbc1b282734294e5/okhttp-2.4.0.jar"
         jumboMode="false"
         optimize="true"
         revision="26.0.1"
-        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
-        <dex dex="/home/hangtrantd/AndroidCode/DACNPM/app/build/intermediates/pre-dexed/debug/butterknife-7.0.1_c11233751331e6651af3266d657a451ee5bfeddf.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/home/hangtrantd/.android/build-cache/33648068091e35cabcb8ef896a9cc19e90f22be3/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="26.0.1"
-        sha1="5094eccf53998e9bcacfb85f80e7607b39b093fd">
-        <dex dex="/home/hangtrantd/AndroidCode/DACNPM/app/build/intermediates/pre-dexed/debug/classes_7b3d786687302de323d79b8ccb884d6727fd4a23.jar" />
+        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
+        <dex dex="/home/hangtrantd/AndroidCode/QuanLiTruongTieuHoc/app/build/intermediates/pre-dexed/debug/okhttp-2.4.0_6742e5dec533e6c21121333aabc0883bf09621df.jar" />
     </item>
 
 </items>
